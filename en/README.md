@@ -583,7 +583,9 @@ claude --permission-mode plan
 Shift+Tab
 ```
 
-### Protected Paths (Never Auto-approved)
+### Sensitive Paths and Protected-Path Prompts
+
+The examples below are sensitive paths worth reviewing before an agent changes them. Claude Code has additional approval checks for its built-in protected paths, but these checks are **not unconditional**: `bypassPermissions` skips permission prompts even for protected-path writes such as `.git/` and `.claude/`. Do not rely on these prompts as an enforcement boundary in bypass mode. See [Claude Code's current permission-mode reference](https://code.claude.com/docs/en/permissions#permission-modes).
 
 ```
 .git/  .vscode/  .idea/  .gitconfig  .gitmodules
