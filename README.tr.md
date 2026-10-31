@@ -52,17 +52,25 @@ Aynı sonuç. Sekizde bir maliyet.
 
 Uzun bir oturumda bunu iki kez kullandım. Token sayısı **82.000 → 11.000**.
 
-### 3. `.claudeignore` şu an hiçbir şey yapmıyor
+### 3. Desteklenen dosya okuma kurallarını kullan
 
-```gitignore
-node_modules/
-dist/
-*.log
-coverage/
-*.lock
+Claude Code, `.claudeignore` dosyasını dikkate almaz. `.claude/settings.json` dosyasındaki `permissions.deny` listesine `Read` kuralları ekle:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(./node_modules/**)",
+      "Read(./dist/**)",
+      "Read(./coverage/**)",
+      "Read(./.env)"
+    ]
+  }
+}
 ```
 
-6 satır. Claude'un okuduğu dosya sayısı projeye göre **3 ila 10 kat** düşüyor.
+Bu kurallar yerleşik dosya araçları için mümkün olduğunca uygulanan kısıtlamalardır; shell komutlarının veya başka araçların erişimini tamamen engellemez. Bkz. [Claude Code izinleri](https://code.claude.com/docs/en/permissions#read-and-edit).
+
 
 ---
 
@@ -140,7 +148,7 @@ Bookmark'lanacak tek sayfa. Günde iki kez bakacağın her şey.
 ```mermaid
 flowchart LR
     A["Muğlak prompt"] -.->|Token yakar| X(["Başarısız"])
-    B["CLAUDE.md<br/>+ .claudeignore"] --> C["Spesifik prompt"]
+    B["CLAUDE.md<br/>+ Read kuralları"] --> C["Spesifik prompt"]
     C --> D["Skill çalıştır"]
     D -->|Uzun oturum| E["compact ipucuyla"]
     E --> F(["Ship"])
@@ -155,7 +163,7 @@ flowchart LR
 
 ## Hızlı Başlangıç
 
-**Tek komut** (core skill'ler, `.claudeignore` ve `CLAUDE.md` iskeleti):
+**Tek komut** (core skill'ler ve `CLAUDE.md` iskeleti; okuma kurallarını ayrıca yapılandır):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/berkcangumusisik/claude-code-practices/main/install.sh | bash
@@ -202,9 +210,9 @@ claude
 </details>
 
 <details>
-<summary><b><code>.claudeignore</code> bir şey bozar mı?</b></summary>
+<summary><b><code>.claudeignore</code> dosyaları hariç tutar mı?</b></summary>
 
-<br>Hayır. Sadece Claude'un ne okuyacağını kontrol eder — build'in ve editörün etkilenmez.
+<br>Hayır. Claude Code bu dosyayı dikkate almaz. <code>.claude/settings.json</code> içinde <code>permissions.deny</code> ve <code>Read(...)</code> kuralları kullan; shell erişimini engellemez.
 </details>
 
 <details>
