@@ -30,7 +30,6 @@ Options:
   -h, --help             Show this help
 
 Also installs, if missing:
-  .claudeignore          Default ignore list
   CLAUDE.md              Minimal project memory scaffold
 EOF
       exit 0 ;;
@@ -85,25 +84,10 @@ case "$MODE" in
     ;;
 esac
 
-if [[ ! -f .claudeignore ]]; then
-  cat > .claudeignore <<'EOF'
-node_modules/
-dist/
-build/
-.next/
-coverage/
-*.log
-*.lock
-*.min.js
-*.min.css
-.venv/
-__pycache__/
-target/
-EOF
-  echo "Created .claudeignore"
-else
-  echo "Skipped .claudeignore (already exists)"
-fi
+# Claude Code does not support .claudeignore; do not create an ineffective
+# file which users might mistake for a file-read security control.
+echo "To restrict built-in file reads, set permissions.deny Read rules in .claude/settings.json."
+echo "See https://code.claude.com/docs/en/permissions#read-and-edit"
 
 if [[ ! -f CLAUDE.md ]]; then
   cat > CLAUDE.md <<'EOF'
