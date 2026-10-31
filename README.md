@@ -52,17 +52,25 @@ Same outcome. One-eighth the cost.
 
 In one long session this took me from **82,000 → 11,000 tokens**.
 
-### 3. `.claudeignore` is doing nothing for you right now
+### 3. Configure supported read restrictions
 
-```gitignore
-node_modules/
-dist/
-*.log
-coverage/
-*.lock
+Claude Code ignores `.claudeignore` files. Merge path-specific `Read` rules into the `permissions.deny` array in `.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(./node_modules/**)",
+      "Read(./dist/**)",
+      "Read(./coverage/**)",
+      "Read(./.env)"
+    ]
+  }
+}
 ```
 
-Six lines. File reads drop **3× to 10×** depending on the project.
+These are best-effort restrictions for built-in file tools, not a guarantee against access through shell commands or other tools. See [Claude Code's official permissions documentation](https://code.claude.com/docs/en/permissions#read-and-edit).
+
 
 ---
 
@@ -141,7 +149,7 @@ Bookmark-worthy one-pager. Everything you'll reach for twice a day.
 ```mermaid
 flowchart LR
     A["Vague prompt"] -.->|Wastes tokens| X(["Fail"])
-    B["CLAUDE.md<br/>+ .claudeignore"] --> C["Specific prompt"]
+    B["CLAUDE.md<br/>+ Read rules"] --> C["Specific prompt"]
     C --> D["Run a skill"]
     D -->|Long session| E["compact with hint"]
     E --> F(["Ship"])
@@ -156,7 +164,7 @@ flowchart LR
 
 ## Quick Start
 
-**One command** (installs core skills, `.claudeignore`, and `CLAUDE.md` scaffold):
+**One command** (installs core skills and a `CLAUDE.md` scaffold; configure read rules separately):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/berkcangumusisik/claude-code-practices/main/install.sh | bash
@@ -203,9 +211,9 @@ claude
 </details>
 
 <details>
-<summary><b>Will <code>.claudeignore</code> break anything?</b></summary>
+<summary><b>Does <code>.claudeignore</code> exclude files?</b></summary>
 
-<br>No. It only controls what Claude reads — your build and editor are unaffected.
+<br>No. Claude Code ignores the file. Use <code>permissions.deny</code> with <code>Read(...)</code> rules in <code>.claude/settings.json</code>. These do not restrict shell access.
 </details>
 
 <details>
