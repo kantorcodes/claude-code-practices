@@ -170,19 +170,25 @@ Ayrıntılı iş akışlarını skills'e taşı - skill'ler yalnızca çağrıld
 /mcp  # Yönetim panelini aç
 ```
 
-### .claudeignore
+### Claude Code dosya okuma araçlarında yolları hariç tutma
 
-```gitignore
-# .claudeignore
-node_modules/
-dist/
-build/
-*.log
-.env
-coverage/
-*.lock
-*.min.js
+Claude Code, `.claudeignore` dosyasını dikkate almaz. Mevcut `.claude/settings.json` dosyasının `permissions.deny` listesine `Read` kuralları ekle:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(./node_modules/**)",
+      "Read(./dist/**)",
+      "Read(./build/**)",
+      "Read(./coverage/**)",
+      "Read(./.env)"
+    ]
+  }
+}
 ```
+
+Bu kurallar yerleşik dosya araçlarında mümkün olduğunca uygulanır; keyfî shell komutları için tam güvenlik sınırı değildir. Bkz. [resmî izin kuralları](https://code.claude.com/docs/en/permissions#read-and-edit).
 
 ### Model Seçim Kılavuzu
 
