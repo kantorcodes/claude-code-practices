@@ -170,19 +170,25 @@ Move detailed workflows to skills - skills only load when invoked.
 /mcp  # Open management panel
 ```
 
-### .claudeignore
+### Excluding paths from Claude Code's built-in file tools
 
-```gitignore
-# .claudeignore
-node_modules/
-dist/
-build/
-*.log
-.env
-coverage/
-*.lock
-*.min.js
+Claude Code ignores `.claudeignore`. Merge scoped `Read` rules into the `permissions.deny` array of the existing `.claude/settings.json`:
+
+```json
+{
+  "permissions": {
+    "deny": [
+      "Read(./node_modules/**)",
+      "Read(./dist/**)",
+      "Read(./build/**)",
+      "Read(./coverage/**)",
+      "Read(./.env)"
+    ]
+  }
+}
 ```
+
+The rules are best-effort for built-in file tools and do not prevent arbitrary shell access. See [official permission rules](https://code.claude.com/docs/en/permissions#read-and-edit).
 
 ### Model Selection Guide
 
