@@ -83,8 +83,9 @@ MAX_THINKING_TOKENS=4000 claude
 # Low effort for simple tasks
 claude --effort low "Fix typo in README"
 
-# Exclude noisy files
-echo "node_modules/\ndist/\n*.log\ncoverage/" > .claudeignore
+# Configure Read exclusions under permissions.deny in .claude/settings.json:
+# {"permissions":{"deny":["Read(./node_modules/**)","Read(./dist/**)","Read(./coverage/**)"]}}
+# Merge with existing settings; .claudeignore does nothing.
 ```
 
 ---
